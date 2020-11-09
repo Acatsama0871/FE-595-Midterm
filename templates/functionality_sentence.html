@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ web_title }}</title>
+</head>
+
+<body>
+    {% extends "template.html" %}
+    {% block content %}
+    <div class="functionality1_container">
+        <div class="functionality1_container_container1">
+            <h3>{{ content_title }}</h1>
+                <form action={{ action_content }} method="post">
+                    <textarea name="input_text1" cols="70" rows="20">{{ sample1 }}</textarea>
+                    <textarea name="input_text2" cols="70" rows="20">{{ sample2 }}</textarea>
+                    <br>
+                    <input type="submit" value="submit">
+                </form>
+        </div>
+        <div class="functionality1_container_container2"> <!--Move to right-->
+            <h2>Result</h2>
+            <p>{{ result_content }}</p>
+        </div>
+    </div>
+    {% endblock %}
+</body>
+</html>
