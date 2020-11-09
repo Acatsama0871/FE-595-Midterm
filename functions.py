@@ -11,6 +11,7 @@ import seaborn as sns
 import tensorflow_hub as hub
 import matplotlib.pyplot as plt
 from collections import Counter
+from flask import Markup
 from textblob import TextBlob, Word
 from textblob.wordnet import VERB, ADV, ADJ
 from nltk import FreqDist
@@ -44,27 +45,6 @@ def Sample(Str):
 
     doc4 = '''Do not go gentle into that better night,
     Old age shoulds burn and rave at close of day;
-    Rage, rage against the dying of the light.
-
-    Though wise men at their end knew dark are right,
-    Because their words had forked no lightning they
-    Do not go gentle into that good night.
-
-    Good men, the last wave by, cry how bright
-    Their frail deeds might have danced in a green bay,
-    Rage, rage against the dying of the light.
-
-    Wild mens who cuaght and sang the sun in flight,
-    And leran, too late, they grieved it on its way,
-    Do not go gentle into that good night.
-
-    Grave men, near death, who see with blinding sight
-    Blind eyes could blaze like meteors and be gay,
-    Rage, rage against the dying of the light.
-
-    And you, my father, there on the sad height,
-    Curse, bless, me now with your fierce tears, I pray.
-    Do not go gentle into that good night.
     Rage, rage against the dying of the light.'''
 
     doc5 = "cat is on the mat"
@@ -125,13 +105,14 @@ def text_summarization(text):
 
     # Keywords group2
     topic2 = np.array(keywords(text, words=24).split("\n"))
-    topic2 = 'The recommended keys words(2): ' + ",".join(topic2)
+    topic2 = 'The recommended keys words: ' + ",".join(topic2)
 
     # Summarization
     summarization = summarize(text, word_count=40)
-    summarization = "The main idea for this topic: " + summarization
+    summarization = "The main idea for this topic:<br>" + summarization
 
-    string = summarization + '\n' + topic1 + '\n' + topic2
+    # string = Markup(summarization + '<br><br>' + topic1 + '<br><br>' + topic2)
+    string = Markup(summarization + '<br><br>' + topic2)
     return string
 
 
@@ -150,9 +131,11 @@ def text_classification(text):
     seq = x_tokenizer.texts_to_sequences(text)
     padded = pad_sequences(seq, maxlen=200)
     pred = model.predict_classes(padded)
-    labels = ['sport', 'business', 'politics', 'tech', 'entertainment', 'others']
+    labels = ['Sport', 'Business', 'Politics', 'Tech', 'Entertainment', 'Others']
+    
+    return_string = 'Text Class:' + '<br><br>' + labels[pred[0]]
 
-    return labels[pred[0]]
+    return Markup(return_string)
 
 
 # text translation
@@ -191,7 +174,8 @@ def text_spelling_correction(text):
     res1 = str(text.correct())
     res2 = "/".join(resultbef)
     res3 = "/".join(resultaft)
-    res = res1 + '\n' + res2 + '\n' + res3
+    res = Markup(res1)
+    
     return res
 
 
@@ -226,6 +210,8 @@ def tag_converter(tag):
 
 
 def text_synonymous_substitution(text, freq_limit=3):
+    text = text.replace('the', '')
+    text = text.replace('The', '')
     sentences_blob = TextBlob(text)
     sentences_count = 1
     dictionary = []
@@ -292,17 +278,17 @@ def text_synonymous_substitution(text, freq_limit=3):
             cur_record['synonym'] = synonym_string
 
         # output string
-        output_string_formatter = 'At {}, the word "{}" can be replaced by [{}]\n'
+        output_string_formatter = 'At {}, the word "{}" can be replaced by [{}]<br>'
         if len(dictionary_selected) == 0:
             output_string = "No suggestion"
         else:
-            output_string = "Suggestions:\n\n"
+            output_string = "Suggestions:<br><br>"
             for cur_record in dictionary_selected:
                 output_string += output_string_formatter.format(cur_record['string'],
                                                                 cur_record['Word_original'],
                                                                 cur_record['synonym'])
 
-        return output_string
+        return Markup(output_string)
     except:
         return "Sorry some words may not in the corpus."
 
@@ -314,8 +300,8 @@ def text_grammar_check(text):
     corrected_text_string = ''
     corrected_words_string = ''
     changes_count = 0
-    formatter_words = 'At sentence {} word {}, the "{}" is replaced by "{}".\n'
-    header_string = '{} change(s) are made to original text. \n\n The changed text is:\n\n'
+    formatter_words = 'At sentence {} word {}, the "{}" is replaced by "{}".<br>'
+    header_string = '{} change(s) are made to original text. <br><br> The changed text is:<br><br>'
 
     try:
         # sentences tokenization
@@ -356,12 +342,12 @@ def text_grammar_check(text):
             sentences_count += 1
 
         # output string
-        corrected_text_string += '\n\n'
+        corrected_text_string += '<br><br>'
         output_string = header_string.format(changes_count) + corrected_text_string + corrected_words_string
     except:
         return "Sorry, the function can't handle the text. Please try another one."
 
-    return output_string
+    return Markup(output_string)
 
 
 # sentence similarity
@@ -373,8 +359,10 @@ def text_sentence_similarity(sentence1, sentence2):
 
     # calculate cos
     cos = np.sum(vector1 * vector2) / (np.linalg.norm(vector1) * np.linalg.norm(vector2))
+    
+    return_string = 'cos similarity:<br><br>' + str(cos)
 
-    return cos
+    return Markup(return_string)
 
 
 # text score
@@ -415,11 +403,11 @@ def text_score(text):
         the_score = 0
 
     # return string
-    return_string_formatter = "The score of the text is {}.\n(Each grammar error: -3, Each spelling error: -3))\n\n"
-    return_string_formatter += grammar_string + '\n' + spelling_string
+    return_string_formatter = "The score of the text is {}.<br>(Each grammar error: -3, Each spelling error: -3))<br><br>"
+    return_string_formatter += grammar_string + '<br>' + spelling_string
     return_string = return_string_formatter.format(the_score)
 
-    return return_string
+    return Markup(return_string)
 
 
 # text statistics
