@@ -128,7 +128,7 @@ def text_classification(text):
         x_tokenizer = pickle.load(handle)
     os.chdir(current)
 
-    seq = x_tokenizer.texts_to_sequences(text)
+    seq = x_tokenizer.texts_to_sequences([text])
     padded = pad_sequences(seq, maxlen=200)
     pred = model.predict_classes(padded)
     labels = ['Sport', 'Business', 'Politics', 'Tech', 'Entertainment', 'Others']
