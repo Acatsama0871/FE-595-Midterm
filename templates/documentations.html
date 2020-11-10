@@ -10,68 +10,199 @@
     {% block content %}
     <div class="documentations_container">
         <div class="documentations_title">
-            <h3>Functions' Documentation</h1><!--The title of the project-->
+            <h3>Documentation</h1><!--The title of the project-->
         </div>
         <div class="documentations_content"> <!--The description text-->
             <div class="documentations_p">
                 <h3>Text summarization</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <p>Purpose: <br>
+                    The function can be used to search the main idea behind the input text and also can be used for summarizing the keywords for the input text.
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The text will be processed through tokenization, lemmatization and stopword-deleting method. 
+                    And then the pre-processed text will be converted to the word vectors, and the Latent Dirichlet Allocation method will be implemented to select the best topics of the input text.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    Please enter at least a 200-words text; otherwise, the topic may not be found.
+                    <br>
+                    <br>
+                     Author:<br>
+                     Baihao Huang
+                </p>
             </div>
+
             <div class="documentations_p">
                 <h3>Text Classification</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <p>Purpose: <br>
+                    The function can be used to identify the class of input text. 
+                    And the input text will be classified into the following theme: Sport, Business, Politics, Technology, Environment and Others.
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The text will be processed through tokenization, lemmatization and stopword-deleting method. 
+                    And then each sentence of the pre-processed text will be converted into a 200-dimensional vector by using text-to-score method.
+                    A three-layer LSTM model will be implemented to classify the input text.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    Please enter at least a 200-word text; otherwise, the LSTM classifier may misclassify the text.
+                    <br>
+                    <br>
+                     Author:<br>
+                     Baihao Huang
+                </p>
             </div>
             <div class="documentations_p">
                 <h3>Text Translation</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <p>Purpose: <br>
+                    The function will translate the english to other language(French, Spanish, German are available).
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The function is implemented by using the translation feature in TextBlob package.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    None
+                    <br>
+                    <br>
+                     Author:<br>
+                     Mengyuan He
+                </p>
             </div>
             <div class="documentations_p">
-                <h3>Text Spelling Correction</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <h3>Spelling Correction</h3>
+                <p>Purpose: <br>
+                    The function will find and correct the misspelled words in the input text.
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The function is implemented by using the spelling correction in TextBlob package.
+                    The input text will be tokenized to sentence and parsed by spelling correction function.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    If the input text is too large or contains a lot of errors, the function may take longer to return result.
+                    <br>
+                    <br>
+                     Author:<br>
+                     Haonan Wang
+                </p>
             </div>
             <div class="documentations_p">
                 <h3>Sentiment Analysis</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <p>Purpose: <br>
+                    The function can be used to detect the sentiment of the text.
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    Split each sentence in the text. The sentiment scorer from Textblob will be used to calculate the polarity score and subjectivity score.
+                    The average of the text score and each sentence score will return to users.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    None
+                    <br>
+                    <br>
+                     Author:<br>
+                     Baihao Huang
+                </p>
             </div>
+
             <div class="documentations_p">
-                <h3>Word Net: Synonymous Substitution</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <h3>High Frequency Adjective Words Substitution</h3>
+                <p>Purpose: <br>
+                    For adjectives that appear too frequently in the text(>3), the function will give substitutions advice by using synonyms.
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The function is implement by using the wordnet feature in TextBlob. For each word in input text, if the occurrence of the word is larger than three. 
+                    The function will give the replacement suggestion by using the word's synonyms.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    Due to storage limitation of server side, we only download a small corpus. Some words may not in the corpus and the function may not be able to detect it.
+                    But it will work with common adjectives in our test. 
+                    <br>
+                    <br>
+                     Author:<br>
+                     Haonan Wang</p>
             </div>
             <div class="documentations_p">
                 <h3>Grammar Check</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <p>Purpose: <br>
+                    The function will find the grammar error in the input text. The function will point out the occurrence of the errors and output the corrected text.
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The function is implement by using the GingerIt package. The input text will be tokenized to sentence and each sentence will be passed to GingerIt function to 
+                    find the error.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    The GingerIt package can not handle certain type of grammar error or sophisticated sentence. If that happens, the function will output error massage. 
+                    <br>
+                    <br>
+                     Author:<br>
+                     Mengyuan He</p>
             </div>
             <div class="documentations_p">
-                <h3>Punctuation Check</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <h3>Sentences Similarity</h3>
+                <p>Purpose: <br>
+                    The function will find the similarity score for two arbitrary sentences. The similarity score will take value from the range[-1, 1]. The most similar sentences 
+                    will take score of 1.0.
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The function will convert the input sentences to vector(50 dimensions) by using the pre-trained model(https://tfhub.dev/google/nnlm-en-dim50/2) on TensorFlow.
+                    The cosine of the angle between will be calculated. 
+                    <br>
+                    <br>
+                    Notice:<br>
+                    The function may run slow on it's first call. In the first call, it will retrieve the pre-trained model from TensorFlow Hub. When the pre-trained model is loaded,
+                    function will run at a relative fast speed.
+                    <br>
+                    <br>
+                     Author:<br>
+                     Haohang Li</p>
             </div>
             <div class="documentations_p">
                 <h3>Text Score</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <p>Purpose: <br>
+                    The function will give a input text a score based on the grammar error and spelling error. The full score is 100 with three points deducted for each error.
+                    The function will also point out the error in text.
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The function use the GingerIt to detect grammar and use correct() feature in TextBlob to detect the spelling error.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    The function may run slow for large input text.
+                    <br>
+                    <br>
+                     Author:<br>
+                     Haohang Li</p>
             </div>
             <div class="documentations_p">
                 <h3>Text Statistics</h3>
-                <p>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Quo odit animi molestias et? 
-                Tempore consectetur delectus enim labore recusandae ab at voluptate cumque. Ex optio aut 
-                soluta molestias nihil mollitia.</p>
+                <p>Purpose: <br>
+                    The function will count the number of part-speech tags of the input text
+                    <br>
+                    <br>
+                    Implementation:<br>
+                    The text will be processed through tokenization, lemmatization and stopword-deleting method. Use the function Tag from package Textblob to identify the part of speech in a text.
+                    Calculate the components of the part of the speech for the input text.
+                    <br>
+                    <br>
+                    Notice:<br>
+                    None
+                    <br>
+                    <br>
+                     Author:<br>
+                     Zichen Gao</p>
             </div>
         </div>
     </div>
