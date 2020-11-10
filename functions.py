@@ -128,7 +128,7 @@ def text_classification(text):
         x_tokenizer = pickle.load(handle)
     os.chdir(current)
 
-    seq = x_tokenizer.texts_to_sequences(text)
+    seq = x_tokenizer.texts_to_sequences([text])
     padded = pad_sequences(seq, maxlen=200)
     pred = model.predict_classes(padded)
     labels = ['Sport', 'Business', 'Politics', 'Tech', 'Entertainment', 'Others']
@@ -189,14 +189,16 @@ def text_sentiment_analysis(text):
         score2 = np.append(score2, sentence.sentiment.subjectivity)  # TODO validate
     ave1 = np.mean(score1)
     ave2 = np.mean(score2)
-    string = 'The average polarity score for this text is: ' + str(ave1) + '\n' + \
-             'The average subjective score for this text is ' + str(ave2)
+    string = 'The average polarity score for this text is: ' + str(ave1) + '<br>' + \
+             'The average subjective score for this text is ' + str(ave2) + '<br><br>' + \
+             'Sentence Index' + '&emsp;&emsp;' + 'Polarity Score' + '&emsp;&emsp;' + 'Subjectivity' + '<br>'
 
-    # df = pd.DataFrame({'polarity' : score1, 'subjective' : score2})
-    plt.hist(score1)
-    plt.hist(score2)
-    plt.savefig('Sentiment_Score_Distribution.png')
-    return string
+    range = np.arange(0, len(score1), 1)
+    for i in range:
+        string = string + "Sentence" + str(i) + '&emsp;&emsp;&emsp;&emsp;' + '%.5f' % round(score1[i], 4) + '&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;'\
+                 + '%.5f' % round(score2[i], 4) + '<br>'
+
+    return Markup(string)
 
 
 # synonymous substitution
@@ -411,52 +413,12 @@ def text_score(text):
 
 
 # text statistics
-def text_statistics_wordTag(text):
-    # tokenization
-    tokenizer = RegexpTokenizer(r'\w+')
-    raw = text.lower()
-    tokens = tokenizer.tokenize(raw)
+def text_statistics_wordTag(doc):
 
-    # lemmatizer
-    lemmatizer = WordNetLemmatizer()
-    lemma = [lemmatizer.lemmatize(i) for i in tokens]
-
-    # delete the stop words
-    stop_words = set(stopwords.words('english'))
-    stopped_tokens = [i for i in lemma if not i in stop_words]
-    text = stopped_tokens
-
-    count2 = pos_tag(text)
-    word_list = pd.DataFrame(count2, columns=['Word', "Tag"])
-
-    # The average number of words per sentence
-    number_sentence = len(sent_tokenize(text))
-    number_words = len(word_tokenize(text))
-    Theaverage = float(number_words / number_sentence)
-    string = "The average numner of words per sentence: " + str(Theaverage)
-
-    # The frequency for the words
-    current = os.getcwd()
-    new = current + "/pic"
-    os.chdir(new)
-
-    sns.set_theme()
-    sns.set_context("paper")
-    sns.catplot(x="Tag", kind="count", palette="vlag", data=word_list)
-    plt.title('The Frequency For The Tag In Text')
-    plt.savefig('Frequency_Tag.png')
-    os.chdir(current)
-
-    return string
-
-
-def text_statistics_WordFrequency(doc):
-    # tokenization
     tokenizer = RegexpTokenizer(r'\w+')
     raw = doc.lower()
     tokens = tokenizer.tokenize(raw)
 
-    # lemmatizer
     lemmatizer = WordNetLemmatizer()
     lemma = [lemmatizer.lemmatize(i) for i in tokens]
 
@@ -465,16 +427,22 @@ def text_statistics_WordFrequency(doc):
     stopped_tokens = [i for i in lemma if not i in stop_words]
     text = stopped_tokens
 
-    # The most common words
-    current = os.getcwd()
-    new = current + "/pic"
-    os.chdir(new)
+    # Tag frequency
+    count = pos_tag(text)
+    word_list = pd.DataFrame(count, columns=['Word', "Tag"])
+    Tag_fre = word_list['Tag'].value_counts()
+    Tag_fre = Tag_fre.reset_index()
 
-    fre = FreqDist(text).most_common(10)
-    fre = pd.DataFrame(fre, columns=['Word', "Frequence"])
-    sns.set_theme()
-    sns.set_context("paper")
-    sns.scatterplot(data=fre, x="Word", y="Frequence", hue="Word", s=100, style="Word")
-    plt.title('The Frequency For The Word In Text')
-    plt.savefig('Frequency_word.png')
-    os.chdir(current)
+    # The average number of words per sentence
+    number_sentence = len(sent_tokenize(doc))
+    number_words = len(word_tokenize(doc))
+    Theaverage = float(number_words / number_sentence)
+    string = "The average number of words per sentence: " + str(Theaverage) + "<br><br><br>" + \
+             "Tag" + "&emsp;&emsp;&emsp;" + "Count" + "&emsp;&emsp;&emsp;" + "Frequency" + "<br>"
+
+    for i in range(len(Tag_fre)) :
+        string = string + '<br>' + '%4s' % Tag_fre['index'][i] + "&emsp;&emsp;&emsp;" + '%3d' % Tag_fre['Tag'][i] + "&emsp;&emsp;&emsp;" + '%.4f' % (Tag_fre['Tag'][i] / number_words)
+
+    string = Markup(string)
+
+    return string
